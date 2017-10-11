@@ -1,0 +1,23 @@
+{
+  "name": "breakout-ts",
+  "version": "1.0.0",
+  "description": "A Breakout Game done in TypeScript",
+  "main": "breakout.js",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\"https://github.com/Azayzel/breakout_ts"
+  },
+  "keywords": [
+    "Breakout",
+    "HTML5",
+    "Javascript",
+    "Games",
+    "TypeScript"
+  ],
+  "author": "Josh Lavely",
+  "license": "MIT"
+}
