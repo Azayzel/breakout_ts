@@ -91,6 +91,7 @@ function collisionDetection() {
                 if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                     dy = -dy;
                     b.status = 0;
+                    collided(x, y);
                     score++;
                     if (score == brickRowCount * brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
@@ -110,6 +111,7 @@ function gameLoop() {
     drawScore();
     drawLives();
     collisionDetection();
+    drawExplosion();
     if (x + dx > cWidth - ball || x + dx < ball) {
         dx = -dx;
     }
@@ -143,6 +145,92 @@ function gameLoop() {
     }
     x += dx;
     y += dy;
+}
+// explosions
+// Options
+var background = '#333'; // Background color
+var particlesPerExplosion = 20;
+var particlesMinSpeed = 3;
+var particlesMaxSpeed = 6;
+var particlesMinSize = 1;
+var particlesMaxSize = 3;
+var explosions = [];
+var fps = 60;
+var interval = 1000 / fps;
+var now, delta;
+var then = Date.now();
+// Optimization for mobile devices
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    fps = 29;
+}
+// Draw explosion(s)
+function drawExplosion() {
+    if (explosions.length === 0) {
+        return;
+    }
+    for (var i = 0; i < explosions.length; i++) {
+        var explosion_1 = explosions[i];
+        var particles = explosion_1.particles;
+        if (particles.length === 0) {
+            explosions.splice(i, 1);
+            return;
+        }
+        var particlesAfterRemoval = particles.slice();
+        for (var ii = 0; ii < particles.length; ii++) {
+            var particle_1 = particles[ii];
+            // Check particle size
+            // If 0, remove
+            if (particle_1.size <= 0) {
+                particlesAfterRemoval.splice(ii, 1);
+                continue;
+            }
+            ctx.beginPath();
+            ctx.arc(particle_1.x, particle_1.y, particle_1.size, Math.PI * 2, 0, false);
+            ctx.closePath();
+            ctx.fillStyle = 'rgb(' + particle_1.r + ',' + particle_1.g + ',' + particle_1.b + ')';
+            ctx.fill();
+            // Update
+            particle_1.x += particle_1.xv;
+            particle_1.y += particle_1.yv;
+            particle_1.size -= .1;
+        }
+        explosion_1.particles = particlesAfterRemoval;
+    }
+}
+// Clicked
+function collided(x, y) {
+    explosions.push(new explosion(x, y));
+}
+// Explosion
+function explosion(x, y) {
+    this.particles = [];
+    for (var i = 0; i < particlesPerExplosion; i++) {
+        this.particles.push(new particle(x, y));
+    }
+}
+// Particle
+function particle(x, y) {
+    this.x = x;
+    this.y = y;
+    this.xv = randInt(particlesMinSpeed, particlesMaxSpeed, false);
+    this.yv = randInt(particlesMinSpeed, particlesMaxSpeed, false);
+    this.size = randInt(particlesMinSize, particlesMaxSize, true);
+    this.r = randInt(113, 222, true);
+    this.g = '00';
+    this.b = randInt(105, 255, true);
+}
+// Returns an random integer, positive or negative
+// between the given value
+function randInt(min, max, positive) {
+    var num;
+    if (positive === false) {
+        num = Math.floor(Math.random() * max) - min;
+        num *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+    }
+    else {
+        num = Math.floor(Math.random() * max) + min;
+    }
+    return num;
 }
 // Event Handlers
 addEventListener("keydown", downHandler, false);
