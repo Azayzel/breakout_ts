@@ -185,10 +185,13 @@ function drawExplosion() {
                 continue;
             }
             ctx.beginPath();
-            ctx.arc(particle_1.x, particle_1.y, particle_1.size, Math.PI * 2, 0, false);
-            ctx.closePath();
+            ctx.rect(particle_1.x, particle_1.y, 10, 10);
+            //ctx.arc(particle.x, particle.y, particle.size, Math.PI * 2, 0, false);
+            //ctx.closePath();
             ctx.fillStyle = 'rgb(' + particle_1.r + ',' + particle_1.g + ',' + particle_1.b + ')';
             ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
             // Update
             particle_1.x += particle_1.xv;
             particle_1.y += particle_1.yv;
@@ -208,7 +211,7 @@ function explosion(x, y) {
         this.particles.push(new particle(x, y));
     }
 }
-// Particle
+// Particles
 function particle(x, y) {
     this.x = x;
     this.y = y;
@@ -219,8 +222,7 @@ function particle(x, y) {
     this.g = '00';
     this.b = randInt(105, 255, true);
 }
-// Returns an random integer, positive or negative
-// between the given value
+// Returns random integer
 function randInt(min, max, positive) {
     var num;
     if (positive === false) {

@@ -219,11 +219,16 @@ function drawExplosion() {
         continue;
       }
 
+        // make particles squares
       ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size, Math.PI * 2, 0, false);
-      ctx.closePath();
+      ctx.rect(particle.x, particle.y, 6, 6)
+        // below if for circle particle
+      //ctx.arc(particle.x, particle.y, particle.size, Math.PI * 2, 0, false);
+      //ctx.closePath();
       ctx.fillStyle = 'rgb(' + particle.r + ',' + particle.g + ',' + particle.b + ')';
       ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
 
       // Update
       particle.x += particle.xv;
@@ -258,7 +263,7 @@ function explosion(x, y) {
 
 }
 
-// Particle
+// Particles
 function particle(x, y) {
   this.x    = x;
   this.y    = y;
@@ -270,8 +275,7 @@ function particle(x, y) {
   this.b    = randInt(105, 255, true);
 }
 
-// Returns an random integer, positive or negative
-// between the given value
+// Returns random integer
 function randInt(min, max, positive) {
 
   let num;
